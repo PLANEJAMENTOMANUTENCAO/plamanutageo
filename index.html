@@ -25,11 +25,26 @@
     }
   </style>
 
-  <!-- Script para recarregar a página a cada 1 hora -->
   <script>
-    setTimeout(function () {
-      location.reload();
-    }, 3600000); // 1 hora em milissegundos
+    // Função para agendar o próximo reload em hora cheia (ex: 08:00:00, 09:00:00, etc.)
+    function scheduleReload() {
+      const now = new Date();
+      const currentHour = now.getHours();
+
+      // Só agenda o reload se estiver entre 07 e 16 (pra recarregar até às 17h)
+      if (currentHour >= 7 && currentHour < 17) {
+        const nextHour = new Date(now);
+        nextHour.setHours(currentHour + 1, 0, 0, 0); // próxima hora cheia
+        const timeUntilNextHour = nextHour - now;
+
+        setTimeout(() => {
+          location.reload();
+        }, timeUntilNextHour);
+      }
+    }
+
+    // Inicia o agendamento quando a página carrega
+    window.onload = scheduleReload;
   </script>
 </head>
 <body>
